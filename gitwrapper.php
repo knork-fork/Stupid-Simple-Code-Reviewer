@@ -140,7 +140,7 @@ else
                         die();
                     
                     foreach ($output as $output_line)
-                        handle_log($output_line, $submodule);
+                        handle_log($output_line);
                 }
 
                 /* commit diff */
@@ -165,14 +165,9 @@ else
 
 <?php
 
-function handle_log($line, $submodule)
+function handle_log($line)
 {
     $line = htmlspecialchars($line);
-
-    if ($submodule != "")
-        $extra = "&extra=$submodule";
-    else
-        $extra = "";
 
     echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
 
