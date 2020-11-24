@@ -30,7 +30,18 @@ http://localhost/gitbrowser.php?dir=/home/luka/repo&commit=abcdef012
 ## Installation
 Place **gitwrapper.php** anywhere with a configured PHP web server and access to a desired git repository.
 
+## Screenshots
+
+![step_1.png](https://raw.githubusercontent.com/knork-fork/Stupid-Simple-Code-Reviewer/master/screenshots/step_1.png)
+
+![step_2.png](https://raw.githubusercontent.com/knork-fork/Stupid-Simple-Code-Reviewer/master/screenshots/step_2.png)
+
+![step_3.png](https://raw.githubusercontent.com/knork-fork/Stupid-Simple-Code-Reviewer/master/screenshots/step_3.png)
+
+![step_4.png](https://raw.githubusercontent.com/knork-fork/Stupid-Simple-Code-Reviewer/master/screenshots/step_4.png)
+
 ## TO-DO/WIP
 - Merge commits aren't always shown properly
 - **No input sanitization**
 - No validation or error handling
+- Code isn't indented properly
