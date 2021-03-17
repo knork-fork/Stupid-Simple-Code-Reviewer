@@ -55,9 +55,9 @@ else
         document.getElementById('branch_2').value = branch_1;
     }
 
-    function commit_list()
+    function commit_list(dir)
     {
-        url = "dir=<?= $_REQUEST["dir"] ?>";
+        url = "dir=" + dir;
         url += "&branch_1=" + document.getElementById('branch_1').value;
         url += "&branch_2=" + document.getElementById('branch_2').value;
         window.location.search = url;
@@ -114,7 +114,7 @@ else
                     <button class="btn btn-default btn" style="font-size:20px;margin-top:20px;"
                         onclick="main();">Back</button>
                     <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
-                        onclick="commit_list();">Next</button>
+                        onclick="commit_list('<?= $_REQUEST["dir"] ?>');">Next</button>
                 </div>
             </div>
         <? } ?>
