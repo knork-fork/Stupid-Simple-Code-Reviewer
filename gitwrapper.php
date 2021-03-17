@@ -12,56 +12,61 @@ else
 ?>
 
 <style>
-    #main-content {
-        font-family: Open Sans;
-        font-size: 24px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 50px;
-        letter-spacing: 0px;
-        text-align: center;
-    }
+#main-content {
+    font-family: Open Sans;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: 0px;
+    text-align: center;
+}
 
-    .main-screen {
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, 0px);
-        top: 30%;
-        width: 600px;
-    }
+.main-screen {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    top: 30%;
+    width: 600px;
+}
 
-    .title {
-        color: #000000;
-        mix-blend-mode: normal;
-        opacity: 0.77;
-        margin-bottom: 7%;
-    }
+.title {
+    color: #000000;
+    mix-blend-mode: normal;
+    opacity: 0.77;
+    margin-bottom: 7%;
+}
+
+.terminal_view {
+    background-color: black;
+    height: 100vh;
+}
 </style>
 <script>
-    function main()
-    {
-        window.location.search = "";
-    }
+function to_main()
+{
+    window.location.search = "";
+}
 
-    function branch_pick()
-    {
-        window.location.search = "dir=" + document.getElementById('git_dir').value;
-    }
+function to_branch_pick()
+{
+    window.location.search = "dir=" + document.getElementById('git_dir').value;
+}
 
-    function branch_switch()
-    {
-        branch_1 = document.getElementById('branch_1').value;
-        document.getElementById('branch_1').value = document.getElementById('branch_2').value;
-        document.getElementById('branch_2').value = branch_1;
-    }
+function branch_switch()
+{
+    branch_1 = document.getElementById('branch_1').value;
+    document.getElementById('branch_1').value = document.getElementById('branch_2').value;
+    document.getElementById('branch_2').value = branch_1;
+}
 
-    function commit_list(dir)
-    {
-        url = "dir=" + dir;
-        url += "&branch_1=" + document.getElementById('branch_1').value;
-        url += "&branch_2=" + document.getElementById('branch_2').value;
-        window.location.search = url;
-    }
+function to_commit_list(dir)
+{
+    url = "dir=" + dir;
+    url += "&branch_1=" + document.getElementById('branch_1').value;
+    url += "&branch_2=" + document.getElementById('branch_2').value;
+    window.location.search = url;
+}
 </script>
 
 <!DOCTYPE html>
@@ -83,88 +88,114 @@ else
     </head>
 
     <body>
-        <!-- main screen -->
-        <? if ($screen == "main") { ?>
-            <div id="main-content">
-                <div class="main-screen">
-                    <p class="title"> GIT Browser </p>
-                    <p style="text-align:left;margin-left:20px;">Git directory:</p>
-                    <div>
-                        <span class = "col-md-11">
-                            <input id="git_dir" class="form-control" style="min-height:50px;text-align:right;font-size:20px;" type="text" placeholder="git repo directory">
-                        </span>
-                        <span class = "col-md-1" style="margin-left:-20px;font-size:20px;">/.git</span>
-                    </div>
-                    <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
-                        onclick="branch_pick();">Next</button>
-                </div>
+
+<!-- 
+    main screen
+    - starting point of app
+    - used to input directory of git repo (not counting the /.git part)
+-->
+<? if ($screen == "main") { ?>
+    <div id="main-content">
+        <div class="main-screen">
+            <p class="title"> GIT Browser </p>
+            <p style="text-align:left;margin-left:20px;">Git directory:</p>
+            <div>
+                <span class = "col-md-11">
+                    <input id="git_dir" class="form-control" style="min-height:50px;text-align:right;font-size:20px;" type="text" placeholder="git repo directory">
+                </span>
+                <span class = "col-md-1" style="margin-left:-20px;font-size:20px;">/.git</span>
             </div>
-        <? } ?>
-        <!-- branch pick -->
-        <? if ($screen == "branch_pick") { ?>
-            <div id="main-content">
-                <div class="main-screen">
-                    <p class="title"> Compare branch to target </p>
-                    <p style="text-align:left;margin-left:5px;margin-top:-10px;">Git branch:</p>
-                    <input id="branch_1" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="" placeholder="branch-name">
-                    <button class="btn btn-default btn" style="font-size:25px;margin-top:15px;"
-                        title="switch branches" onclick="branch_switch();">⭥</button>
-                    <p style="text-align:left;margin-left:5px;margin-top:0px;">Target branch (e.g. master):</p>
-                    <input id="branch_2" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="master" placeholder="master">
-                    <button class="btn btn-default btn" style="font-size:20px;margin-top:20px;"
-                        onclick="main();">Back</button>
-                    <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
-                        onclick="commit_list('<?= $_REQUEST["dir"] ?>');">Next</button>
-                </div>
-            </div>
-        <? } ?>
-        <? if ($screen == "commit_list" || $screen == "commit_diff") { ?>
-            <div style="background-color:black;height:100vh;">
-            <?php
-                $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
-                
-                /* commit list */
-                if ($screen == "commit_list")
-                {
-                    $source = $_REQUEST["branch_1"];
-                    
-                    if (isset($_REQUEST["branch_2"]) && $_REQUEST["branch_2"] != "")
-                        $target = $_REQUEST["branch_2"];
-                    else
-                        $target = "master";
+            <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
+                onclick="to_branch_pick();">Next</button>
+        </div>
+    </div>
+<? } ?>
 
-                    $git = "git $git_dir log --pretty=format:'%h==%cr==%an==%s' --abbrev-commit $source ^$target";
 
-                    exec($git, $output);
-                    if (empty($output))
-                        die();
-                    
-                    foreach ($output as $output_line)
-                        handle_log($output_line);
-                }
+<!-- 
+    branch pick
+    - after main
+    - used to input branches to be compared, target branch is master by default
+-->
+<? if ($screen == "branch_pick") { ?>
+    <div id="main-content">
+        <div class="main-screen">
+            <p class="title"> Compare branch to target </p>
+            <p style="text-align:left;margin-left:5px;margin-top:-10px;">Git branch:</p>
+            <input id="branch_1" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="" placeholder="branch-name">
+            <button class="btn btn-default btn" style="font-size:25px;margin-top:15px;"
+                title="switch branches" onclick="branch_switch();">⭥</button>
+            <p style="text-align:left;margin-left:5px;margin-top:0px;">Target branch (e.g. master):</p>
+            <input id="branch_2" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="master" placeholder="master">
+            <button class="btn btn-default btn" style="font-size:20px;margin-top:20px;"
+                onclick="to_main();">Back</button>
+            <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
+                onclick="to_commit_list('<?= $_REQUEST["dir"] ?>');">Next</button>
+        </div>
+    </div>
+<? } ?>
 
-                /* commit diff */
-                if ($screen == "commit_diff")
-                {
-                    $commit = $_REQUEST["commit"];
 
-                    $git = "git $git_dir show --format=medium --abbrev-commit $commit";
+<!-- 
+    commit list
+    - after branch pick
+    - list all found commits, commit can be clicked to show commit diff screen
+-->
+<? if ($screen == "commit_list") { ?>
+    <div class="terminal_view">
+    <?php
+        $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
 
-                    exec($git, $output);
+        $source = $_REQUEST["branch_1"];
+        
+        // Default to master if no other target branch picked
+        if (isset($_REQUEST["branch_2"]) && $_REQUEST["branch_2"] != "")
+            $target = $_REQUEST["branch_2"];
+        else
+            $target = "master";
 
-                    if (empty($output))
-                        die();
+        $git = "git $git_dir log --pretty=format:'%h==%cr==%an==%s' --abbrev-commit $source ^$target";
 
-                    handle_commit($output);
-                }
-            ?>
-            </div>
-        <? } ?>
+        exec($git, $output);
+        if (empty($output))
+            die();
+           
+        foreach ($output as $output_line)
+            handle_log($output_line);
+    ?>
+    </div>
+<? } ?>
+
+
+<!-- 
+    commit diff
+    - after commit list
+    - show diff for certain commit
+-->
+<? if ($screen == "commit_diff") { ?>
+    <div class="terminal_view">
+    <?php
+        $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
+
+        $commit = $_REQUEST["commit"];
+
+        $git = "git $git_dir show --format=medium --abbrev-commit $commit";
+
+        exec($git, $output);
+
+        if (empty($output))
+            die();
+
+        handle_commit($output);
+    ?>
+    </div>
+<? } ?>
+
     </body>
 </html>
 
-<?php
 
+<?php
 function handle_log($line)
 {
     $line = htmlspecialchars($line);
@@ -197,13 +228,15 @@ function handle_log($line)
 
     echo "</div>";
 }
+?>
 
 
+<?php
 function handle_commit($commit)
 {
     $counter = 0;
     // Make sure commit message doesn't trigger any of the output modifiers below
-    $post_diff = false;
+    $after_diff = false;
 
     echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
 
@@ -238,10 +271,10 @@ function handle_commit($commit)
             echo "</span>";
             echo "<br>";
 
-            $post_diff = true;
+            $after_diff = true;
         }
-        else if ($post_diff && output_ignore($line)) { }
-        else if ($post_diff && substr($line, 0, strlen("new file mode")) === "new file mode")
+        else if ($after_diff && output_ignore($line)) { }
+        else if ($after_diff && substr($line, 0, strlen("new file mode")) === "new file mode")
         {
             // New file label
             echo "<span style='color:#27519c;'>";
@@ -249,7 +282,7 @@ function handle_commit($commit)
             echo "</span>";
             echo "<br>";
         }
-        else if ($post_diff && $line[0] === "+")
+        else if ($after_diff && substr($line, 0, 1) === "+")
         {
             // Added changes
             echo "<span style='color:#00941b'>";
@@ -257,7 +290,7 @@ function handle_commit($commit)
             echo "</span>";
             echo "<br>";
         }
-        else if ($post_diff && $line[0] === "-")
+        else if ($after_diff && substr($line, 0, 1) === "-")
         {
             // Removed changes
             echo "<span style='color:#b80000'>";
@@ -265,7 +298,7 @@ function handle_commit($commit)
             echo "</span>";
             echo "<br>";
         }
-        else if (!$post_diff)
+        else if (!$after_diff)
         {
             // Commit message (after title)
             echo "<span style='color:white'>";
@@ -281,7 +314,7 @@ function handle_commit($commit)
             echo "<br>";
         }
 
-        if (!$post_diff) $counter++;
+        if (!$after_diff) $counter++;
     }
 
     echo "</div>";
@@ -289,7 +322,7 @@ function handle_commit($commit)
 
 function output_ignore($str)
 {
-    // These are file changes again, ignore...
+    // These are file changes *again*, it's okay to ignore
     if (substr($str, 0, 4) === "+++ " || substr($str, 0, 4) === "--- ")
         return true;
 
@@ -303,5 +336,4 @@ function output_ignore($str)
     
     return false;
 }
-
 ?>
