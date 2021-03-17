@@ -1,0 +1,44 @@
+<?php
+
+if (!isset($_REQUEST["dir"]) || $_REQUEST["dir"] == "")
+    $screen = "main";
+else if (isset($_REQUEST["commit"]) && $_REQUEST["commit"] != "")
+    $screen = "commit_diff";
+else if (isset($_REQUEST["branch_1"]) && $_REQUEST["branch_1"] != "")
+    $screen = "commit_list";
+else
+    $screen = "branch_pick";
+
+?>
+
+<style></style>
+<script></script>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <title> <? 
+            if (isset($_REQUEST["commit"]) && $_REQUEST["commit"] != null)
+                echo $_REQUEST["commit"] . " | ";
+            else if (isset($_REQUEST["branch_1"]) && $_REQUEST["branch_1"] != null)
+                echo $_REQUEST["branch_1"] . " | ";
+            else if (isset($_REQUEST["dir"]) && $_REQUEST["dir"] != null)
+                echo $_REQUEST["dir"] . " | ";
+            echo "GIT BROWSER";
+        ?> </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;lang=en" />
+    </head>
+
+    <body>
+#TAG_MAIN#
+#TAG_BRANCH_PICK#
+#TAG_COMMIT_LIST#
+#TAG_COMMIT_DIFF#
+    </body>
+</html>
+
+#TAG_COMMIT_LIST_PHP#
+#TAG_COMMIT_DIFF_PHP#

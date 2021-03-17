@@ -1,0 +1,23 @@
+#TAG_MAIN#
+<!-- 
+    main screen
+    - starting point of app
+    - used to input directory of git repo (not counting the /.git part)
+-->
+<? if ($screen == "main") { ?>
+    <div id="main-content">
+        <div class="main-screen">
+            <p class="title"> GIT Browser </p>
+            <p style="text-align:left;margin-left:20px;">Git directory:</p>
+            <div>
+                <span class = "col-md-11">
+                    <input id="git_dir" class="form-control" style="min-height:50px;text-align:right;font-size:20px;" type="text" placeholder="git repo directory">
+                </span>
+                <span class = "col-md-1" style="margin-left:-20px;font-size:20px;">/.git</span>
+            </div>
+            <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
+                onclick="to_branch_pick();">Next</button>
+        </div>
+    </div>
+<? } ?>
+#TAG_MAIN#

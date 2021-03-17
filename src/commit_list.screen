@@ -1,0 +1,68 @@
+#TAG_COMMIT_LIST#
+<!-- 
+    commit list
+    - after branch pick
+    - list all found commits, commit can be clicked to show commit diff screen
+-->
+<? if ($screen == "commit_list") { ?>
+    <div class="terminal_view">
+    <?php
+        $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
+
+        $source = $_REQUEST["branch_1"];
+        
+        // Default to master if no other target branch picked
+        if (isset($_REQUEST["branch_2"]) && $_REQUEST["branch_2"] != "")
+            $target = $_REQUEST["branch_2"];
+        else
+            $target = "master";
+
+        $git = "git $git_dir log --pretty=format:'%h==%cr==%an==%s' --abbrev-commit $source ^$target";
+
+        exec($git, $output);
+        if (empty($output))
+            die();
+           
+        foreach ($output as $output_line)
+            handle_log($output_line);
+    ?>
+    </div>
+<? } ?>
+#TAG_COMMIT_LIST#
+
+#TAG_COMMIT_LIST_PHP#
+<?php
+function handle_log($line)
+{
+    $line = htmlspecialchars($line);
+
+    echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
+
+    $line = explode("==", $line, 4);
+
+    // Commit hash
+    echo "<a href='?dir={$_REQUEST["dir"]}&commit={$line[0]}' style='text-decoration:none'>";
+    echo "<div style='color:#CCA43D; display:inline-block;'>";
+    echo $line[0];
+    echo "</div>";
+    echo "</a> ";
+
+    // Commit message
+    echo "<span style='color:white'>";
+    echo $line[3];
+    echo "</span> ";
+
+    // Commit date
+    echo "<span style='color:#0d9440'>";
+    echo $line[1];
+    echo "</span> ";
+
+    // Commit author
+    echo "<span style='color:#098f96'>";
+    echo $line[2];
+    echo "</span>";
+
+    echo "</div>";
+}
+?>
+#TAG_COMMIT_LIST_PHP#

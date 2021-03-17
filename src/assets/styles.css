@@ -1,0 +1,29 @@
+#main-content {
+    font-family: Open Sans;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: 0px;
+    text-align: center;
+}
+
+.main-screen {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    top: 30%;
+    width: 600px;
+}
+
+.title {
+    color: #000000;
+    mix-blend-mode: normal;
+    opacity: 0.77;
+    margin-bottom: 7%;
+}
+
+.terminal_view {
+    background-color: black;
+    height: 100vh;
+}

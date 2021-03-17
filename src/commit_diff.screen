@@ -1,0 +1,134 @@
+#TAG_COMMIT_DIFF#
+<!-- 
+    commit diff
+    - after commit list
+    - show diff for certain commit
+-->
+<? if ($screen == "commit_diff") { ?>
+    <div class="terminal_view">
+    <?php
+        $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
+
+        $commit = $_REQUEST["commit"];
+
+        $git = "git $git_dir show --format=medium --abbrev-commit $commit";
+
+        exec($git, $output);
+
+        if (empty($output))
+            die();
+
+        handle_commit($output);
+    ?>
+    </div>
+<? } ?>
+#TAG_COMMIT_DIFF#
+
+#TAG_COMMIT_DIFF_PHP#
+<?php
+function handle_commit($commit)
+{
+    $counter = 0;
+    // Make sure commit message doesn't trigger any of the output modifiers below
+    $after_diff = false;
+
+    echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
+
+    foreach($commit as $line)
+    {
+        // Escape html
+        $line = htmlspecialchars($line);
+
+        if ($counter < 4)
+        {
+            // Commit, author and date
+            echo "<span style='color:#CCA43D'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+        }
+        else if ($counter <= 5)
+        {
+            // Commit message
+            echo "<span style='color:white'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+        }
+        else if (substr($line, 0, strlen("diff --git")) === "diff --git"
+            || substr($line, 0, strlen("diff --cc")) === "diff --cc")
+        {
+            // File changed
+            echo "<hr>";
+            echo "<span style='color:#4f8eff;'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+
+            $after_diff = true;
+        }
+        else if ($after_diff && output_ignore($line)) { }
+        else if ($after_diff && substr($line, 0, strlen("new file mode")) === "new file mode")
+        {
+            // New file label
+            echo "<span style='color:#27519c;'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+        }
+        else if ($after_diff && substr($line, 0, 1) === "+")
+        {
+            // Added changes
+            echo "<span style='color:#00941b'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+        }
+        else if ($after_diff && substr($line, 0, 1) === "-")
+        {
+            // Removed changes
+            echo "<span style='color:#b80000'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+        }
+        else if (!$after_diff)
+        {
+            // Commit message (after title)
+            echo "<span style='color:white'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+        }
+        else
+        {
+            echo "<span style='color:gray'>";
+            echo $line;
+            echo "</span>";
+            echo "<br>";
+        }
+
+        if (!$after_diff) $counter++;
+    }
+
+    echo "</div>";
+}
+
+function output_ignore($str)
+{
+    // These are file changes *again*, it's okay to ignore
+    if (substr($str, 0, 4) === "+++ " || substr($str, 0, 4) === "--- ")
+        return true;
+
+    // Index something line, ignore
+    if (substr($str, 0, strlen("index ")) === "index ")
+        return true;
+
+    // Ignore line number, doesn't look friendly
+    if (substr($str, 0, 3) === "@@ " || substr($str, 0, 4) === "@@@ ")
+        return true;
+    
+    return false;
+}
+?>
+#TAG_COMMIT_DIFF_PHP#
