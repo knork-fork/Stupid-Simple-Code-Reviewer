@@ -20,5 +20,22 @@
                 onclick="to_commit_list('<?= $_REQUEST["dir"] ?>');">Next</button>
         </div>
     </div>
+    <script>
+        // Detect 'enter' key in branch pick inputs
+        document.getElementById("branch_1").addEventListener("keyup", function(event) 
+        {
+            if (event.key == "Enter") 
+            {
+                to_commit_list('<?= $_REQUEST["dir"] ?>');
+            }
+        });
+        document.getElementById("branch_2").addEventListener("keyup", function(event) 
+        {
+            if (event.key == "Enter") 
+            {
+                to_commit_list('<?= $_REQUEST["dir"] ?>');
+            }
+        });
+    </script>
 <?php } ?>
 #TAG_BRANCH_PICK#

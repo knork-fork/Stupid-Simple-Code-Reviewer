@@ -19,5 +19,15 @@
                 onclick="to_branch_pick();">Next</button>
         </div>
     </div>
+    <script>
+        // Detect 'enter' key in directory input
+        document.getElementById("git_dir").addEventListener("keyup", function(event) 
+        {
+            if (event.key == "Enter") 
+            {
+                to_branch_pick();
+            }
+        });
+    </script>
 <?php } ?>
 #TAG_MAIN#
