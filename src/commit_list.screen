@@ -4,7 +4,7 @@
     - after branch pick
     - list all found commits, commit can be clicked to show commit diff screen
 -->
-<? if ($screen == "commit_list") { ?>
+<?php if ($screen == "commit_list") { ?>
     <div class="terminal_view">
     <?php
         $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
@@ -27,7 +27,7 @@
             handle_log($output_line);
     ?>
     </div>
-<? } ?>
+<?php } ?>
 #TAG_COMMIT_LIST#
 
 #TAG_COMMIT_LIST_PHP#

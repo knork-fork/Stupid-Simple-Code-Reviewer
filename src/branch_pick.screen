@@ -4,7 +4,7 @@
     - after main
     - used to input branches to be compared, target branch is master by default
 -->
-<? if ($screen == "branch_pick") { ?>
+<?php if ($screen == "branch_pick") { ?>
     <div id="main-content">
         <div class="main-screen">
             <p class="title"> Compare branch to target </p>
@@ -20,5 +20,5 @@
                 onclick="to_commit_list('<?= $_REQUEST["dir"] ?>');">Next</button>
         </div>
     </div>
-<? } ?>
+<?php } ?>
 #TAG_BRANCH_PICK#

@@ -4,7 +4,7 @@
     - starting point of app
     - used to input directory of git repo (not counting the /.git part)
 -->
-<? if ($screen == "main") { ?>
+<?php if ($screen == "main") { ?>
     <div id="main-content">
         <div class="main-screen">
             <p class="title"> GIT Browser </p>
@@ -19,5 +19,5 @@
                 onclick="to_branch_pick();">Next</button>
         </div>
     </div>
-<? } ?>
+<?php } ?>
 #TAG_MAIN#

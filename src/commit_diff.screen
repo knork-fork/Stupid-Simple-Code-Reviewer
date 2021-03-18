@@ -4,7 +4,7 @@
     - after commit list
     - show diff for certain commit
 -->
-<? if ($screen == "commit_diff") { ?>
+<?php if ($screen == "commit_diff") { ?>
     <div class="terminal_view">
     <?php
         $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
@@ -21,7 +21,7 @@
         handle_commit($output);
     ?>
     </div>
-<? } ?>
+<?php } ?>
 #TAG_COMMIT_DIFF#
 
 #TAG_COMMIT_DIFF_PHP#
