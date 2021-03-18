@@ -41,6 +41,13 @@ else
     background-color: black;
     height: 100vh;
 }
+
+.terminal_text {
+    background-color:black; 
+    font-size:16px; 
+    font-family:Ubuntu Mono; 
+    padding:5px;
+}
 </style>
 <script>
 function to_main()
@@ -74,7 +81,7 @@ function to_commit_list(dir)
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <title> <? 
+        <title> <?php 
             if (isset($_REQUEST["commit"]) && $_REQUEST["commit"] != null)
                 echo $_REQUEST["commit"] . " | ";
             else if (isset($_REQUEST["branch_1"]) && $_REQUEST["branch_1"] != null)
@@ -84,7 +91,9 @@ function to_commit_list(dir)
             echo "GIT BROWSER";
         ?> </title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;lang=en" />
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en" />
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet"> 
     </head>
 
     <body>
@@ -94,7 +103,7 @@ function to_commit_list(dir)
     - starting point of app
     - used to input directory of git repo (not counting the /.git part)
 -->
-<? if ($screen == "main") { ?>
+<?php if ($screen == "main") { ?>
     <div id="main-content">
         <div class="main-screen">
             <p class="title"> GIT Browser </p>
@@ -109,7 +118,17 @@ function to_commit_list(dir)
                 onclick="to_branch_pick();">Next</button>
         </div>
     </div>
-<? } ?>
+    <script>
+        // Detect 'enter' key in directory input
+        document.getElementById("git_dir").addEventListener("keyup", function(event) 
+        {
+            if (event.key == "Enter") 
+            {
+                to_branch_pick();
+            }
+        });
+    </script>
+<?php } ?>
 
 
 <!-- 
@@ -117,23 +136,53 @@ function to_commit_list(dir)
     - after main
     - used to input branches to be compared, target branch is master by default
 -->
-<? if ($screen == "branch_pick") { ?>
+<?php if ($screen == "branch_pick") { ?>
     <div id="main-content">
         <div class="main-screen">
             <p class="title"> Compare branch to target </p>
             <p style="text-align:left;margin-left:5px;margin-top:-10px;">Git branch:</p>
-            <input id="branch_1" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="" placeholder="branch-name">
+            <input id="branch_1" class="form-control" style="min-height:50px;font-size:20px;" autoComplete="on" list="suggestions" value="" placeholder="branch-name">
             <button class="btn btn-default btn" style="font-size:25px;margin-top:15px;"
-                title="switch branches" onclick="branch_switch();">⭥</button>
+                title="switch branches" onclick="branch_switch();"><  ></button>
             <p style="text-align:left;margin-left:5px;margin-top:0px;">Target branch (e.g. master):</p>
-            <input id="branch_2" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="master" placeholder="master">
+            <input id="branch_2" class="form-control" style="min-height:50px;font-size:20px;" autoComplete="on" list="suggestions" value="master" placeholder="master">
             <button class="btn btn-default btn" style="font-size:20px;margin-top:20px;"
                 onclick="to_main();">Back</button>
             <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
                 onclick="to_commit_list('<?= $_REQUEST["dir"] ?>');">Next</button>
         </div>
     </div>
-<? } ?>
+    <datalist id="suggestions">
+        <?php
+        $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
+        $git = "git $git_dir branch";
+        exec($git, $output);
+
+        foreach ($output as $output_line)
+        {
+            $output_line = trim($output_line, "* "); // Remove active branch tag
+            echo "<option>$output_line</option>";
+        }
+        ?>
+    </datalist>
+    <script>
+        // Detect 'enter' key in branch pick inputs
+        document.getElementById("branch_1").addEventListener("keyup", function(event) 
+        {
+            if (event.key == "Enter") 
+            {
+                to_commit_list('<?= $_REQUEST["dir"] ?>');
+            }
+        });
+        document.getElementById("branch_2").addEventListener("keyup", function(event) 
+        {
+            if (event.key == "Enter") 
+            {
+                to_commit_list('<?= $_REQUEST["dir"] ?>');
+            }
+        });
+    </script>
+<?php } ?>
 
 
 <!-- 
@@ -141,7 +190,7 @@ function to_commit_list(dir)
     - after branch pick
     - list all found commits, commit can be clicked to show commit diff screen
 -->
-<? if ($screen == "commit_list") { ?>
+<?php if ($screen == "commit_list") { ?>
     <div class="terminal_view">
     <?php
         $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
@@ -164,7 +213,7 @@ function to_commit_list(dir)
             handle_log($output_line);
     ?>
     </div>
-<? } ?>
+<?php } ?>
 
 
 <!-- 
@@ -172,7 +221,7 @@ function to_commit_list(dir)
     - after commit list
     - show diff for certain commit
 -->
-<? if ($screen == "commit_diff") { ?>
+<?php if ($screen == "commit_diff") { ?>
     <div class="terminal_view">
     <?php
         $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
@@ -189,7 +238,7 @@ function to_commit_list(dir)
         handle_commit($output);
     ?>
     </div>
-<? } ?>
+<?php } ?>
 
     </body>
 </html>
@@ -200,7 +249,7 @@ function handle_log($line)
 {
     $line = htmlspecialchars($line);
 
-    echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
+    echo "<div class='terminal_text'>";
 
     $line = explode("==", $line, 4);
 
@@ -238,7 +287,7 @@ function handle_commit($commit)
     // Make sure commit message doesn't trigger any of the output modifiers below
     $after_diff = false;
 
-    echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
+    echo "<div class='terminal_text'>";
 
     foreach($commit as $line)
     {
