@@ -36,7 +36,7 @@ function handle_log($line)
 {
     $line = htmlspecialchars($line);
 
-    echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
+    echo "<div class='terminal_text'>";
 
     $line = explode("==", $line, 4);
 

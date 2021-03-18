@@ -32,7 +32,7 @@ function handle_commit($commit)
     // Make sure commit message doesn't trigger any of the output modifiers below
     $after_diff = false;
 
-    echo "<div style='background-color:black; font-size:16px; font-family:consolas; padding:5px;'>";
+    echo "<div class='terminal_text'>";
 
     foreach($commit as $line)
     {
