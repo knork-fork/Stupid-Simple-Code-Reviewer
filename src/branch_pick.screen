@@ -9,17 +9,30 @@
         <div class="main-screen">
             <p class="title"> Compare branch to target </p>
             <p style="text-align:left;margin-left:5px;margin-top:-10px;">Git branch:</p>
-            <input id="branch_1" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="" placeholder="branch-name">
+            <input id="branch_1" class="form-control" style="min-height:50px;font-size:20px;" autoComplete="on" list="suggestions" value="" placeholder="branch-name">
             <button class="btn btn-default btn" style="font-size:25px;margin-top:15px;"
-                title="switch branches" onclick="branch_switch();">⭥</button>
+                title="switch branches" onclick="branch_switch();"><  ></button>
             <p style="text-align:left;margin-left:5px;margin-top:0px;">Target branch (e.g. master):</p>
-            <input id="branch_2" class="form-control" style="min-height:50px;font-size:20px;" type="text" value="master" placeholder="master">
+            <input id="branch_2" class="form-control" style="min-height:50px;font-size:20px;" autoComplete="on" list="suggestions" value="master" placeholder="master">
             <button class="btn btn-default btn" style="font-size:20px;margin-top:20px;"
                 onclick="to_main();">Back</button>
             <button class="btn btn-default btn btn-primary" style="font-size:20px;margin-top:20px;"
                 onclick="to_commit_list('<?= $_REQUEST["dir"] ?>');">Next</button>
         </div>
     </div>
+    <datalist id="suggestions">
+        <?php
+        $git_dir = "--git-dir {$_REQUEST["dir"]}/.git";
+        $git = "git $git_dir branch";
+        exec($git, $output);
+
+        foreach ($output as $output_line)
+        {
+            $output_line = trim($output_line, "* "); // Remove active branch tag
+            echo "<option>$output_line</option>";
+        }
+        ?>
+    </datalist>
     <script>
         // Detect 'enter' key in branch pick inputs
         document.getElementById("branch_1").addEventListener("keyup", function(event) 
